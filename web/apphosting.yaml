@@ -1,0 +1,33 @@
+# Firebase App Hosting config for the HUGIN web app (project hugin-b1ff5).
+# The NEXT_PUBLIC_* values are the public Firebase web config: they ship in the browser bundle,
+# and access is controlled by Firebase Auth and the Firestore/Storage rules, not by hiding them.
+
+runConfig:
+  minInstances: 0
+  maxInstances: 2
+  concurrency: 80
+  cpu: 1
+  memoryMiB: 512
+
+env:
+  - variable: NEXT_PUBLIC_FIREBASE_API_KEY
+    value: AIzaSyB9jwIfUfdW7LK2qBzUcS3Dap29dE4NmQc
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+    value: hugin-b1ff5.firebaseapp.com
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_PROJECT_ID
+    value: hugin-b1ff5
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+    value: hugin-b1ff5.firebasestorage.app
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+    value: "69505950566"
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_FIREBASE_APP_ID
+    value: 1:69505950566:web:124330b8bf623622141ea7
+    availability: [BUILD, RUNTIME]
+  - variable: NEXT_PUBLIC_USE_EMULATORS
+    value: "false"
+    availability: [BUILD, RUNTIME]

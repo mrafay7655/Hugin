@@ -1,0 +1,43 @@
+# dependencies and build output
+node_modules/
+.next/
+out/
+build/
+docs/
+# compiled Cloud Functions (not the web app's src/lib)
+functions/lib/
+*.tsbuildinfo
+storage.rules
+# secrets and local configuration: never committed. The Firebase WEB config is public and lives in apphosting.yaml.
+.env
+.env.*
+!.env.example
+.secret.local
+*.pem
+*.key
+service-account*.json
+*-credentials.json
+
+# firebase local state and logs
+.firebase/
+*.log
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+
+# test output
+test-results/
+playwright-report/
+coverage/
+
+# editor and OS
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# a nested git repository left over from create-next-app must not be committed into this one
+web/.git/
+
+# local credentials file written by the production setup
+.credentials*

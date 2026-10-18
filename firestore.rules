@@ -1,0 +1,72 @@
+rules_version = '2';
+
+// HUGIN security rules.
+//
+// Model: the web app can READ everything in its own organization and nothing else.
+// Every WRITE goes through a Cloud Function (Admin SDK, which bypasses these rules), so each
+// change is validated, guarded and audited in one place. The single exception is marking a
+// conversation as read, which is a harmless, field-restricted client write.
+//
+// A user is a member of an org only if their ID token carries { orgId, role }, with role 'manager' or 'judge',
+// which the sign-in blocking function sets after checking the approved-domain list and invites.
+// Both roles can READ. A judge cannot write anything either: all writes go through functions, and the
+// functions decide what a judge may do. A member whose record is marked revoked is locked out at once,
+// even though their token stays valid for up to an hour.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+    function isManager(orgId) {
+      return signedIn()
+        && request.auth.token.orgId == orgId
+        && request.auth.token.role in ['manager', 'judge']
+        && !(exists(/databases/$(database)/documents/orgs/$(orgId)/members/$(request.auth.uid))
+             && get(/databases/$(database)/documents/orgs/$(orgId)/members/$(request.auth.uid)).data.get('revoked', false) == true);
+    }
+
+    match /orgs/{orgId} {
+      allow read: if isManager(orgId);
+      allow write: if false;
+
+      match /conversations/{convId} {
+        allow read: if isManager(orgId);
+        // Mark as read: only the "unread" field, and only to false.
+        allow update: if isManager(orgId)
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['unread'])
+          && request.resource.data.unread == false;
+        allow create, delete: if false;
+
+        match /messages/{msgId} {
+          allow read: if isManager(orgId);
+          allow write: if false;
+        }
+        match /traces/{traceId} {
+          allow read: if isManager(orgId);
+          allow write: if false;
+        }
+      }
+
+      // Everything else under an org is read-only to its managers.
+      match /{collection}/{docId} {
+        allow read: if isManager(orgId);
+        allow write: if false;
+      }
+      match /{collection}/{docId}/{sub=**} {
+        allow read: if isManager(orgId);
+        allow write: if false;
+      }
+    }
+
+    // Webhook ledgers are server-only.
+    match /wa_events/{id} { allow read, write: if false; }
+    match /wa_index/{id} { allow read, write: if false; }
+    match /tg_events/{id} { allow read, write: if false; }
+    match /tg_rate/{id} { allow read, write: if false; }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
