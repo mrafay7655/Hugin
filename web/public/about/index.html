@@ -6,6 +6,8 @@
 <title>HUGIN · Google Cloud AI Builder Cup 2026</title>
 <meta name="description" content="HUGIN is an operating system for a bank's front door: one governed Gemini agent for every private message, every public comment and every channel. It stops scams, moderates the bank's social pages and reads how customers feel, with every decision explained. Google Cloud AI Builder Cup 2026, BFSI track.">
 <meta name="theme-color" content="#FCFCFD">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -302,7 +304,11 @@ h1{font-size:clamp(40px,9vw,84px);line-height:1;letter-spacing:-.05em;font-weigh
 .hon .card{padding:22px}
 .hon h3{margin:0 0 6px;font-size:16px}
 .team{display:flex;flex-wrap:wrap;gap:14px;margin-top:36px}
-.person{display:flex;gap:14px;align-items:center;background:#fff;border-radius:16px;box-shadow:var(--e1);padding:16px 22px}
+.person{display:flex;gap:20px;align-items:center;background:#fff;border-radius:22px;box-shadow:var(--e1);padding:22px 26px;flex:1 1 440px;max-width:560px}
+.person img{width:96px;height:96px;border-radius:50%;object-fit:cover;flex:none;box-shadow:var(--e1)}
+.person b{font-size:18px;font-weight:600;letter-spacing:-.01em}
+.person .role{font-size:13px;color:var(--accent);font-weight:500;margin:2px 0 6px}
+.person p{font-size:14.5px;line-height:1.5;color:var(--text-2)}
 .person .av{width:42px;height:42px;font-size:14px}
 .cta-end{border-radius:28px;background:var(--n950);padding:56px 24px;text-align:center;position:relative;overflow:hidden;color:#fff;background-image:radial-gradient(ellipse 700px 380px at 50% 130%,rgba(74,84,207,.55),transparent 65%)}
 @media(min-width:760px){.cta-end{padding:84px 40px}}
@@ -406,6 +412,13 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;align-items:center;justif
       </div>
     </div>
     <button class="replay" id="replay" type="button">Replay</button>
+  </div>
+</section>
+
+<section id="people" style="padding:48px 0 56px">
+  <div class="wrap">
+    <div class="eyebrow rv"><span class="ln"></span>Built by two people</div>
+    <div class="team rv" id="team" aria-label="The team" style="margin-top:0"></div>
   </div>
 </section>
 
@@ -727,7 +740,6 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;align-items:center;justif
       <div class="card rv" style="--i:1"><h3>The bank is fictional</h3><p>Ravenwood Bank, its customers and its numbers are made up. Sample data is labelled SAMPLE throughout.</p></div>
     </div>
 
-    <div class="team rv" id="team" aria-label="The team"></div>
 
     <div class="cta-end rv" style="margin-top:72px">
       <h2>See it catch a scam. <span>In under a minute.</span></h2>
@@ -755,14 +767,17 @@ const CONFIG = {
   telegram: 'https://t.me/ravenwood_hugin_bot',
   github: '',   // the repository URL
   video: '',    // e.g. a YouTube link to the 3-minute demo
-  team: ['Muhammad Rafay'],   // add the second teammate's name
+  team: [
+    { name: 'Muhammad Rafay', role: 'Team leader · DevOps engineer', photo: '/about/img/team-rafay.jpg', bio: 'Co-created HUGIN from the first idea to the live product: brainstorming, building the agent and dashboard, and deploying it on Google Cloud.' },
+    { name: 'Faizan Ahmed', role: 'Co-builder', photo: '/about/img/team-faizan.jpg', bio: 'Co-created HUGIN from the first idea to the live product: brainstorming, building and deploying it on Google Cloud.' },
+  ],
 };
 document.querySelectorAll('[data-link]').forEach((a) => {
   const url = CONFIG[a.dataset.link];
   if (url) { a.href = url; a.hidden = false; } else a.hidden = true;
 });
 const initials = (n) => n.split(/\s+/).map((p) => p[0]).slice(0, 2).join('').toUpperCase();
-document.getElementById('team').innerHTML = CONFIG.team.map((n) => `<div class="person"><span class="av" style="background:var(--a50);color:var(--a700)">${initials(n)}</span><div><b>${n}</b><div style="font-size:13px;color:var(--text-3)">Team of two</div></div></div>`).join('');
+document.getElementById('team').innerHTML = CONFIG.team.map((m) => `<div class="person">${m.photo ? `<img src="${m.photo}" alt="${m.name}" width="96" height="96" loading="lazy">` : `<span class="av" style="background:var(--a50);color:var(--a700);width:96px;height:96px;font-size:28px">${initials(m.name)}</span>`}<div><b>${m.name}</b><div class="role">${m.role || ''}</div>${m.bio ? `<p>${m.bio}</p>` : ''}</div></div>`).join('');
 
 /* What to try, in three groups */
 const GROUPS = [

@@ -14,6 +14,7 @@ interface Item { to: string; label: string; short?: string; icon: LucideIcon; k?
 const NAV: { group: string; items: Item[] }[] = [
   { group: "Start", items: [
     { to: "/try", label: "Try it live", short: "Try it", icon: Sparkles },
+    { to: "/demo", label: "Demo control", icon: LayoutDashboard },
   ] },
   { group: "Engage", items: [
     { to: "/inbox", label: "Inbox", icon: Inbox, k: "inbox" },
@@ -30,7 +31,6 @@ const NAV: { group: string; items: Item[] }[] = [
     { to: "/policies", label: "Agent policies", icon: SlidersHorizontal },
     { to: "/audit", label: "Audit log", icon: ScrollText },
     { to: "/access", label: "Access", icon: UsersRound },
-    { to: "/demo", label: "Demo control", icon: LayoutDashboard },
   ] },
 ];
 
